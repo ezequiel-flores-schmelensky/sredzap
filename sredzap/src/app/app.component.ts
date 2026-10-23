@@ -11,4 +11,9 @@ import { RouterOutlet } from '@angular/router';
 })
 export class AppComponent {
   title = 'sredzap';
+
+  loginWithGithub() {
+    // Redirige directamente al backend para iniciar el flujo OAuth
+    window.location.href = 'http://localhost:3000/api/auth/github';
+  }
 }
