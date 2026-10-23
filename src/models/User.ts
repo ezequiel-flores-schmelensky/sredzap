@@ -1,4 +1,4 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import { Document, model, Schema } from 'mongoose';
 
 export interface IUser extends Document {
   githubId: string;
@@ -14,4 +14,4 @@ const UserSchema: Schema = new Schema({
   avatarUrl: { type: String },
 });
 
-export default mongoose.model<IUser>('User', UserSchema);
+export default model<IUser>('User', UserSchema);
