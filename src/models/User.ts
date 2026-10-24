@@ -1,10 +1,11 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import { Document, model, Schema } from 'mongoose';
 
 export interface IUser extends Document {
   githubId: string;
   username: string;
   email?: string;
   avatarUrl?: string;
+  accessToken?: string;
 }
 
 const UserSchema: Schema = new Schema({
@@ -12,6 +13,7 @@ const UserSchema: Schema = new Schema({
   username: { type: String, required: true },
   email: { type: String },
   avatarUrl: { type: String },
+  accessToken: { type: String },
 });
 
-export default mongoose.model<IUser>('User', UserSchema);
+export default model<IUser>('User', UserSchema);

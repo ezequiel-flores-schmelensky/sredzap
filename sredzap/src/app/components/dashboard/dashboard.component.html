@@ -1,1 +1,37 @@
 <p>dashboard works!</p>
+<div class="builder-container">
+    <h2>Crear un nuevo Zap</h2>
+    <input [(ngModel)]="zapName" placeholder="Nombre del Zap (Ej. PR Auto-Responder)" />
+
+    <!-- App Picker -->
+    <section>
+        <h3>Desencadenador (Trigger)</h3>
+        <select [(ngModel)]="selectedTriggerApp">
+            <option value="github">GitHub</option>
+            <option value="slack">Slack (Mock)</option>
+            <option value="jira">Jira (Mock)</option>
+        </select>
+
+        @if(selectedTriggerApp === 'github'){
+        <div>
+            <p>Evento: Pull Request Opened</p>
+            <input [(ngModel)]="repoName" placeholder="Dueño/Repositorio (ej. mi-usuario/mi-repo)" />
+        </div>
+        }
+    </section>
+
+    <section>
+        <h3>Acción</h3>
+        <select [(ngModel)]="selectedActionApp">
+            <option value="github">GitHub</option>
+        </select>
+        @if(selectedActionApp === 'github'){
+        <div>
+            <p>Evento: Añadir comentario al PR</p>
+            <textarea [(ngModel)]="commentMessage" placeholder="Mensaje del comentario..."></textarea>
+        </div>
+        }
+    </section>
+
+    <button (click)="saveZap()">Activar Zap</button>
+</div>
