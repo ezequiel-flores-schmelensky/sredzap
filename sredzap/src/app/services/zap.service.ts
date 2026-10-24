@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { HttpHeaders } from '@angular/common/http';
 
 export interface ZapData {
   _id?: string;
@@ -19,10 +20,18 @@ export class ZapService {
   constructor(private http: HttpClient) { }
 
   getZaps(): Observable<ZapData[]> {
-    return this.http.get<ZapData[]>(this.apiUrl);
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+    });
+    return this.http.get<ZapData[]>(this.apiUrl, { headers });
   }
 
   createZap(zap: ZapData): Observable<ZapData> {
-    return this.http.post<ZapData>(this.apiUrl, zap);
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+    });
+    return this.http.post<ZapData>(this.apiUrl, zap, { headers });
   }
 }

@@ -40,7 +40,8 @@ export const authCallback = async (req: Request, res: Response) => {
       user = await User.create({ 
         githubId: id.toString(), 
         username: login, 
-        avatarUrl: avatar_url 
+        avatarUrl: avatar_url,
+        accessToken: accessToken
       });
     }
 

@@ -1,11 +1,10 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { Zap } from '../models/Zap';
 import { AuthRequest } from '../models/AuthRquest';
 
-//export const getZaps = async (req: AuthRequest, res: Response) => {
-export const getZaps = async (req: Request, res: Response) => {
+export const getZaps = async (req: AuthRequest, res: Response) => {
   try {
-    const userId = ""; //req.user!.profile.id;
+    const userId = req.user!.userId;
     const zaps = await Zap.find({ userId });
     res.json(zaps);
   } catch (error) {
@@ -13,9 +12,9 @@ export const getZaps = async (req: Request, res: Response) => {
   }
 };
 
-export const createZap = async (req: Request, res: Response) => {
+export const createZap = async (req: AuthRequest, res: Response) => {
   try {
-    const userId = ""; //req.user!.profile.id;
+    const userId = req.user!.userId;
     const newZap = new Zap({
       ...req.body,
       userId
@@ -27,9 +26,9 @@ export const createZap = async (req: Request, res: Response) => {
   }
 };
 
-export const updateZap = async (req: Request, res: Response) => {
+export const updateZap = async (req: AuthRequest, res: Response) => {
   try {
-    const userId = ""; //req.user!.profile.id;
+    const userId = req.user!.userId;
     const updatedZap = await Zap.findOneAndUpdate(
       { _id: req.params.id, userId }, 
       req.body,
