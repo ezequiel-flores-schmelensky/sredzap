@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import { ZapData, ZapService } from '../../services/zap.service';
 
@@ -9,14 +9,27 @@ import { ZapData, ZapService } from '../../services/zap.service';
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit{
   zapName = '';
   selectedTriggerApp = 'github';
   repoName = '';
   selectedActionApp = 'github';
   commentMessage = '';
+  zaps:ZapData[] = [];
 
   constructor(private zapService: ZapService) {}
+  
+  ngOnInit(): void {
+    this.zapService.getZaps().subscribe({
+      next: (data: ZapData[]) => {
+        this.zaps = data;
+      },
+      error: (error) => {
+        console.error('Error al cargar los Zaps:', error);
+        alert('Hubo un problema al cargar tu lista de Zaps.');
+      }
+    });
+  }
 
   saveZap() {
     const newZap: ZapData = {
@@ -28,6 +41,15 @@ export class DashboardComponent {
 
     this.zapService.createZap(newZap).subscribe(() => {
       alert('Zap creado exitosamente');
+      this.zapService.getZaps().subscribe({
+        next: (data: ZapData[]) => {
+          this.zaps = data;
+        },
+        error: (error) => {
+          console.error('Error al cargar los Zaps:', error);
+          alert('Hubo un problema al cargar tu lista de Zaps.');
+        }
+      });
     });
   }
 }
