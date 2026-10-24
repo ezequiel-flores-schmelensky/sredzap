@@ -1,0 +1,53 @@
+<div class="builder-container">
+    <div class="row">
+        <div class="col-4">
+            <h2>Create a new Zap</h2>
+            <br>
+            <input [(ngModel)]="zapName" placeholder="Zap Name (e.g. PR Listener)" />
+
+            <!-- App Picker -->
+            <section>
+                <h3>Trigger</h3>
+                <select [(ngModel)]="selectedTriggerApp">
+                    <option value="github">GitHub</option>
+                    <option value="slack">Slack (Mock)</option>
+                    <option value="jira">Jira (Mock)</option>
+                </select>
+
+                @if(selectedTriggerApp === 'github'){
+                <div>
+                    <p>Event: Pull Request Opened</p>
+                    <input [(ngModel)]="repoName" placeholder="Repository name (e.g. my-repo)" />
+                </div>
+                }
+            </section>
+
+            <section>
+                <h3>Action</h3>
+                <select [(ngModel)]="selectedActionApp">
+                    <option value="github">GitHub</option>
+                </select>
+                @if(selectedActionApp === 'github'){
+                <div>
+                    <p>Event: Add comment to PR</p>
+                    <textarea [(ngModel)]="commentMessage" placeholder="Message to add..."></textarea>
+                </div>
+                }
+            </section>
+
+            <button (click)="saveZap()">Create Zap</button>
+        </div>
+        <div class="col-8">
+            <h2>My Zaps</h2>
+            <br>
+            <div class="list-group">
+                 @for (zap of zaps; track $index) {
+                    <button type="button" class="list-group-item list-group-item-action">
+                        {{ zap.name }}
+                    </button>
+                 }
+            </div>
+        </div>
+    </div>
+    
+</div>

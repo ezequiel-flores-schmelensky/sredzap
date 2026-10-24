@@ -1,0 +1,13 @@
+.container {
+    padding: 20% 0;
+}
+
+.title {
+    color:white; 
+}
+
+.button {
+    background-color: white;
+    border-radius: 4px;
+    padding: 4px;
+}

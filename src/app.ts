@@ -1,12 +1,19 @@
-import express, { type Express, type Request, type Response } from 'express';
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import { connectDB } from './services/db';
+import routes from './routes/index';
 
-const app: Express = express();
-const port = 3000;
+dotenv.config();
+connectDB();
 
-app.get('/', (req: Request, res: Response) => {
-  res.send('Hello World!');
-});
+const app = express();
+app.use(cors({ origin: 'http://localhost:4200' }));
+app.use(express.json());
 
+app.use('/api', routes);
+
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+  console.log(`Servidor Express con TypeScript en puerto ${port}`);
 });
