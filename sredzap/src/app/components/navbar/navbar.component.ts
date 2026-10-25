@@ -19,10 +19,6 @@ export class NavbarComponent {
     return this.authService.isAuthenticated();
   }
 
-  // get admin() {
-  //   //return this.authService.isAdmin();
-  // }
-
   handlerLogout() {
     this.authService.logout();
     this.router.navigate(['/login'])
