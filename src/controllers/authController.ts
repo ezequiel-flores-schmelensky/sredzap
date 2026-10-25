@@ -1,58 +1,34 @@
 import { Request, Response } from 'express';
-import axios from 'axios';
+import passport from 'passport';
 import jwt from 'jsonwebtoken';
-import User from '../models/User';
 
-// Ruta para iniciar el flujo de GitHub
-export const authGithub = (req: Request, res: Response) => {
-  const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${process.env.GITHUB_CLIENT_ID}&scope=read:user`;
-  res.redirect(githubAuthUrl);
-};
+// Route to initiate the GitHub flow
+// We request access to the email and repositories
+export const authGithub = passport.authenticate('github', { 
+  scope: ['user:email', 'repo'], 
+  session: false 
+});
 
-// Ruta de Callback (GitHub redirige aquí)
-export const authCallback = async (req: Request, res: Response) => {
-  const code = req.query.code as string;
+
+// Callback route (GitHub redirects here)
+// We use an array of middlewares: first Passport, then our final handler
+export const authCallback = [
+  // 1. Passport handles the 'code', obtains the token from GitHub, and executes the strategy defined in app.ts
+  passport.authenticate('github', { 
+    session: false, 
+    failureRedirect: 'http://localhost:4200/login/error' 
+  }),
   
-  if (!code) {
-    return res.redirect('http://localhost:4200/login/error');
-  }
+  // 2. If successful, Passport injects the user from the DB into req.user
+  (req: Request, res: Response) => {
+    // We tell TypeScript that req.user follows the format of our model (it requires an _id)
+    const user = req.user as any; 
 
-  try {
-    // Intercambiar código por Access Token
-    const tokenResponse = await axios.post('https://github.com/login/oauth/access_token', {
-      client_id: process.env.GITHUB_CLIENT_ID,
-      client_secret: process.env.GITHUB_CLIENT_SECRET,
-      code
-    }, { headers: { Accept: 'application/json' } });
-
-    const accessToken = tokenResponse.data.access_token;
-
-    // Obtener información del usuario en GitHub
-    const userResponse = await axios.get('https://api.github.com/user', {
-      headers: { Authorization: `Bearer ${accessToken}` }
-    });
-
-    const { id, login, avatar_url } = userResponse.data;
-
-    // Buscar o crear usuario en MongoDB
-    let user = await User.findOne({ githubId: id.toString() });
-    if (!user) {
-      user = await User.create({ 
-        githubId: id.toString(), 
-        username: login, 
-        avatarUrl: avatar_url,
-        accessToken: accessToken
-      });
-    }
-
-    // Generar JWT propio de la aplicación
+    // Generate an application-specific JWT
     const jwtSecret = process.env.JWT_SECRET as string;
     const token = jwt.sign({ userId: user._id }, jwtSecret, { expiresIn: '8h' });
 
-    // Redirigir al frontend de Angular pasando el token en la URL
+    // Redirect to the Angular frontend, passing the token in the URL (identical to your original code)
     res.redirect(`http://localhost:4200/login/success?token=${token}`);
-  } catch (error) {
-    console.error('Error en autenticación:', error);
-    res.redirect('http://localhost:4200/login/error');
   }
-};
+];

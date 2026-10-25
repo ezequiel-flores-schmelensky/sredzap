@@ -10,7 +10,7 @@ import { RouterOutlet } from '@angular/router';
 })
 export class LoginComponent {
   loginWithGithub() {
-    // Redirige directamente al backend para iniciar el flujo OAuth
+    // Redirects directly to the backend to initiate the OAuth flow
     window.location.href = 'http://localhost:3000/api/auth/github';
   }
 }

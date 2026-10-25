@@ -25,8 +25,8 @@ export class DashboardComponent implements OnInit{
         this.zaps = data;
       },
       error: (error) => {
-        console.error('Error al cargar los Zaps:', error);
-        alert('Hubo un problema al cargar tu lista de Zaps.');
+        console.error('Error loading Zaps:', error);
+        alert('There was a problem loading your list of Zaps.');
       }
     });
   }
@@ -40,14 +40,14 @@ export class DashboardComponent implements OnInit{
     };
 
     this.zapService.createZap(newZap).subscribe(() => {
-      alert('Zap creado exitosamente');
+      alert('Zap successfully created');
       this.zapService.getZaps().subscribe({
         next: (data: ZapData[]) => {
           this.zaps = data;
         },
         error: (error) => {
-          console.error('Error al cargar los Zaps:', error);
-          alert('Hubo un problema al cargar tu lista de Zaps.');
+          console.error('Error loading Zaps:', error);
+          alert('There was a problem loading your list of Zaps.');
         }
       });
     });

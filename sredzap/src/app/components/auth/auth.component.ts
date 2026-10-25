@@ -14,7 +14,7 @@ constructor(private route: ActivatedRoute, private router: Router) {}
     this.route.queryParams.subscribe(params => {
       const token = params['token'];
       if (token) {
-        // Guardar el JWT para futuras peticiones a Express
+        // Save the JWT for future requests to Express
         localStorage.setItem('auth_token', token);
         this.router.navigate(['/dashboard']);
       } else {
