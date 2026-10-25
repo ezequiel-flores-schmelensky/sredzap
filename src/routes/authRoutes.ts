@@ -3,10 +3,10 @@ import { authCallback, authGithub } from '../controllers/authController';
 
 const router = Router();
 
-// Ruta para iniciar el flujo de GitHub
+// Route to initiate the GitHub flow
 router.get('/github', authGithub);
 
-// Ruta de Callback (GitHub redirige aquí)
+// Callback path (GitHub redirects here)
 router.get('/github/callback', authCallback);
 
 export default router;
